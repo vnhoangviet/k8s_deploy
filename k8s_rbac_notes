@@ -1,0 +1,35 @@
+openssl genrsa -out hant.key 2048
+openssl req -new -key hant.key -out hant.csr -subj "/CN=hant/O=DEV"
+openssl x509 -req -in hant.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out hant.crt -days 3650
+kubectl config set-credentials hant --client-certificate=/home/admin/hant-cert/hant.crt  --client-key=/home/admin/hant-cert/hant.key
+kubectl config set-context hant-dev-admin --cluster=kubernetes --namespace=dev --user=hant
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: dev
+  name: dev-admin
+rules:
+- apiGroups: ["","apps/v1","apps","v1"]
+  resources: ["configmaps", "services", "deployments", "replicasets", "pods", "pods/log", "pods/exec", "daemonsets", "statefulsets" ,"jobs" , "cronjobs"]
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dev-admin-binding
+  namespace: dev
+subjects:
+- kind: User
+  name: vietnh
+  apiGroup: ""
+- kind: User
+  name: hant
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: dev-admin
+  apiGroup: ""
+
+kubectl config view --minify --flatten --context=hant-dev-admin > hant.ctx

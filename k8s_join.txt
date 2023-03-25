@@ -1,0 +1,15 @@
+sudo kubeadm init \
+  --pod-network-cidr=10.88.0.0/16 \
+  --control-plane-endpoint=master01.9prints.internal
+
+You can now join any number of control-plane nodes by copying certificate authorities
+and service account keys on each node and then running the following as root:
+
+  kubeadm join master01.9prints.internal:6443 --token bqozh5.l14oz9wqifdua1g6 \
+        --discovery-token-ca-cert-hash sha256:281e7286eb4f6cc2215bd0c27d645526e0877db3e56dcd710e08a9219a116a39 \
+        --control-plane 
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join master01.9prints.internal:6443 --token bqozh5.l14oz9wqifdua1g6 \
+        --discovery-token-ca-cert-hash sha256:281e7286eb4f6cc2215bd0c27d645526e0877db3e56dcd710e08a9219a116a39 

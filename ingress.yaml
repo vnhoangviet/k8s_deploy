@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example.com
+  namespace: development
+spec:
+  ingressClassName: nginx
+# tls:
+#  - hosts:
+#    - olongvien.com
+#    secretName: olongvien-cert
+  rules:
+  - host: example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: php-backend-deployment
+            port:
+              number: 80
