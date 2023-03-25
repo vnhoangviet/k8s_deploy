@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-backend-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: php-backend
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: php-backend
+    spec:
+      containers:
+      - name: php-backend
+        image: nginx:mainline-alpine
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1000Mi"
+        volumeMounts:
+        - name: nginxlog
+          mountPath: /var/log/nginx 
+      dnsConfig:
+          options:
+           - name: ndots
+             value: "1"
+      volumes:
+      - name: nginxlog 
+        persistentVolumeClaim:
+           claimName: nfs-pvc
