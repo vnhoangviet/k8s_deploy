@@ -9,7 +9,7 @@ Vagrant.configure("2") do |k8s_lab|
       master01.vm.hostname = "master01.9prints.internal"
       master01.vm.network "private_network", ip: "10.10.1.101"
       master01.vm.synced_folder ".", "/vagrant"
-      master01.vm.provision "shell", path: "k8s_setup.sh"
+      master01.vm.provision "shell", path: "basic.sh"
       end
    k8s_lab.vm.define "worker01" do |worker01|
       worker01.vm.provider "vmware_desktop" do |v|
@@ -21,7 +21,7 @@ Vagrant.configure("2") do |k8s_lab|
       worker01.vm.hostname = "worker01.9prints.internal"
       worker01.vm.network "private_network", ip: "10.10.1.102"
       worker01.vm.synced_folder ".", "/vagrant"
-      worker01.vm.provision "shell", path: "k8s_setup.sh"
+      worker01.vm.provision "shell", path: "basic.sh"
       end
    k8s_lab.vm.define "worker02" do |worker02|
       worker02.vm.provider "vmware_desktop" do |v|
@@ -33,7 +33,7 @@ Vagrant.configure("2") do |k8s_lab|
       worker02.vm.hostname = "worker02.9prints.internal"
       worker02.vm.network "private_network", ip: "10.10.1.103"
       worker02.vm.synced_folder ".", "/vagrant"
-      worker02.vm.provision "shell", path: "k8s_setup.sh"
+      worker02.vm.provision "shell", path: ".sh"
       end
 
 end
